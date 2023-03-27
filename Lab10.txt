@@ -1,0 +1,134 @@
+MANIFEST.JSON
+
+{
+"name": "Stock Display",
+"short_name": "Stock-Display",
+"display": "standalone",
+"start_url": "/",
+"id": "/",
+"description": "Display stock from json file",
+"icons": [
+{
+"src": "assets/logo.png",
+"type": "image/png",
+"sizes": "512x512",
+"purpose": "maskable"
+},
+{
+"src": "assets/logo.png",
+"type": "image/png",
+"sizes": "512x512",
+"purpose": "any"
+}
+],
+"background_color": "#00AA00",
+"theme_color": "#00CC00"
+}
+
+
+
+
+SW.JS
+self.addEventListener("install", (e) => { console.log("installed");
+caches.open("stock").then((cache) => { 
+cache.add("/"); 
+cache.add("./assets/logo.ico"); 
+cache.add("./assets/logo.png"); 
+cache.add("./data.json"); 
+cache.add("./index.html"); 
+cache.add("./manifest.json"); 
+cache.add("./sw.js");
+})
+.catch((err) => { console.log(err);
+});
+
+})
+self.addEventListener("activate", (e) => { 
+console.log("activated");
+
+})
+self.addEventListener("fetch", (e) => { 
+console.log("fetched");
+e.respondWith(
+caches.match(e.request)
+.then((res) => {
+return res || fetch(e.request);
+})
+.catch((err) => { console.log(err);
+})
+);
+})
+
+
+
+DATA.JSON
+
+[
+{
+"company": "3M",
+"description": "3M, based in Minnesota, may be best known for its Scotch tape and Post-It Notes, but it also produces sand paper, adhesives, medical products, computer screen filters, food safety items, stationery products and many products used in automotive, marine, and aircraft industries.",
+"initial_price": 44.28,
+"price_2002": 56.27,
+"price_2007": 95.85,
+"symbol": "MMM"
+},
+{
+"company": "Amazon.com",
+"description": "Amazon.com, Inc. is an online retailer in North America and internationally. The company serves consumers through its retail Web sites and focuses on selection, price, and convenience. It also offers programs that enable sellers to sell their products on its Web sites, and their own branded Web sites. In addition, the company serves developer customers through Amazon Web Services, which provides access to technology infrastructure that developers can use to enable virtually various type of business. Further, it manufactures and sells the Kindle e-reader. Founded in 1994 and headquartered in Seattle, Washington.",
+"initial_price": 89.38,
+"price_2002": 17.01,
+"price_2007": 93.43,
+"symbol": "AMZN"
+},]
+
+
+
+INDEX.HTML
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stock Display</title>
+<link rel="manifest" href="manifest.json"> <style>
+table{
+border-collapse: collapse;
+}
+td, th {
+padding: 1em;
+border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<center>
+<h2>Stock Market Data Display</h2>
+<div id="stock"></div>
+</center>
+<script>
+if('serviceWorker' in navigator) {
+navigator.serviceWorker.register("sw.js")
+.then((e) => {
+if(e.active === null){
+console.log("registered");
+}
+});
+} else {
+console.log("browser does not support service worker");
+}
+fetch("data.json")
+.then((res) => {
+return res.json();
+})
+.then((stock) => {
+    var table = "<table>";
+    table +="<tr><th>Company</th><th>Description</th><th>Initial Price</th><th>Price in 2007</th><th>Symbol</th></tr>"
+;
+for(item of stock) {
+    table +="<tr><td>"+item.company+"</td><td>"+item.description+"</td><td>"+item.initial_price+"</td><td>"+item.price_2007+"</td><td>"+item.symbol+"</td></tr>";
+}
+table +="</table>";
+document.getElementById("stock").innerHTML = table;
+})
+</script>
+</body>
+</html>

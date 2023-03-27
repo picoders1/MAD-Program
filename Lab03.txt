@@ -1,0 +1,126 @@
+Xml Code for the activity_main.xml
+
+
+<FrameLayout
+ android:id="@+id/frameLayout"
+ android:layout_width="411dp"
+ android:layout_height="0dp"
+ android:layout_marginStart="1dp"
+ android:layout_marginEnd="1dp"
+ android:layout_marginBottom="56dp"
+ app:layout_constraintBottom_toTopOf="@+id/button"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="1.0"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent"
+ app:layout_constraintVertical_bias="0.0">
+</FrameLayout>
+<Button
+ android:id="@+id/button"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginBottom="22dp"
+ android:text="FirstFargment"
+ android:textSize="13dp"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.114"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+<Button
+ android:id="@+id/button2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginEnd="10dp"
+ android:layout_marginBottom="20dp"
+ android:text="SecondFargment"
+ android:textSize="13dp"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.89"
+ app:layout_constraintStart_toEndOf="@+id/button" />
+
+
+
+
+Fragment one xml code
+<TextView
+ android:id="@+id/textView2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="FirstFragment"
+ android:textSize="48dp"
+ android:textColor="#FFFFFF"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+Note Please change the Background of Fragment 
+android:background="#83E111"
+
+
+
+
+Fragment Second xml code
+<TextView
+ android:id="@+id/textView"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="SecondFragment"
+ android:textSize="48dp"
+ android:textColor="#FFFFFF"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+Note Please change the Background of Fragment 
+android:background="#AA7D7D"
+
+
+
+Java Code for Main Activity
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ FirstFragment fragment1=new FirstFragment();
+ secondFragment fragment2=new secondFragment();
+ FragmentManager managerF = getSupportFragmentManager();
+ // FragmentManager is the class responsible for performing actions
+ // on your app's fragments,
+ // such as adding, removing, or replacing them
+ FragmentTransaction Ftransaction = managerF.beginTransaction();
+ //a FragmentManager can add, remove, replace, and perform other actions 
+with fragments
+ // in response to user interaction. Each set of fragment changes that 
+you
+ // commit is called a transaction
+ Ftransaction.add(R.id.frameLayout,fragment1);
+ //add the Fragment
+ Button b1 = findViewById(R.id.button);
+ Button b2 = findViewById(R.id.button2);
+ b1.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View view) {
+ FragmentManager managerF = getSupportFragmentManager();
+ FragmentTransaction Ftransaction = managerF.beginTransaction();
+ Ftransaction.replace(R.id.frameLayout,fragment1);
+ //replace the Fragment
+ Toast.makeText(MainActivity.this,"Changed to 
+Fragment1",Toast.LENGTH_LONG).show();
+ Ftransaction.commit();
+ //Commit the changes in the Activity Main.
+ }
+ });
+ b2.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View view) {
+ FragmentManager managerF = getSupportFragmentManager();
+ FragmentTransaction Ftransaction = managerF.beginTransaction();
+ Ftransaction.replace(R.id.frameLayout,fragment2);
+ Toast.makeText(MainActivity.this,"Changed to 
+Fragment1",Toast.LENGTH_LONG).show();
+ Ftransaction.commit();
+ }
+ });
+}

@@ -1,0 +1,86 @@
+INDEX.HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="index.css">
+    <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="assets/logo.ico" />
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <h1>Github</h1>
+    </center>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(e => console.log("Service worker registered"))
+        } else {
+            console.log("Service worker is not supported")
+        }
+    </script>
+</body>
+</html>
+
+
+
+SW.JS
+
+self.addEventListener('install', () => {
+    console.log("Installed")
+})
+
+self.addEventListener('activate', () => {
+    console.log("Activated")
+})
+
+self.addEventListener('fetch', ()=> {
+    fetch("https://api.github.com/users/photonwings")
+        .then( e => {
+            return e.json()
+        })
+        .then(e => {
+            console.log(e)
+        })
+        .catch(e => {
+            console.log(e)
+        })
+})
+
+MANIFEST.JSON
+
+{
+    "short_name": "GitHub",
+    "name": "Registraion",
+    "description": "Login page",
+    "start_url": "/index.html",
+    "id":"/",
+    "background_color": "#00aae7",
+    "theme_color": "#00aae7",
+    "display": "standalone",
+    "Orientation": "portraite_primary",
+    "icons": [
+    {
+      "src": "assets/apple-icon-152x152-seochecker-manifest-6830.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "assets/apple-icon-144x144-seochecker-manifest-6830.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "assets/apple-icon-120x120-seochecker-manifest-6830.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "assets/apple-icon-114x114-seochecker-manifest-6830.png",
+      "type": "image/png",
+      "sizes": "114x114"
+    }
+  ]
+}
+

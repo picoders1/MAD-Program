@@ -1,0 +1,137 @@
+
+ACTIVITY.XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="328dp"
+        android:layout_marginEnd="148dp"
+        android:text="Button"
+        android:background="@drawable/buttong"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/l1"
+        android:layout_width="387dp"
+        android:layout_height="302dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="3dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+shape.xml:-
+
+<?xml version="1.0" encoding="utf-8"?>
+<selector  xmlns:android="http://schemas.android.com/apk/res/android">
+<shape android:shape="oval"
+
+    >
+    <gradient android:startColor="#FF0000"
+        android:endColor="#00FF00"
+        android:type="linear"/>
+    <corners android:radius="12px"/>
+</shape>
+</selector>
+
+
+buttong.xml:-
+
+<?xml version="1.0" encoding="utf-8"?>
+<selector  xmlns:android="http://schemas.android.com/apk/res/android">
+<shape android:shape="oval"
+
+    >
+    <gradient android:startColor="#FF0000"
+        android:endColor="#00FF00"
+        android:type="linear"/>
+    <corners android:radius="12px"/>
+</shape>
+</selector>
+
+
+mainactivity.java:-
+
+package com.example.lab2;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.Switch;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Button b1=findViewById(R.id.button1);
+        Switch s1=findViewById(R.id.switch1);
+        ConstraintLayout c=findViewById(R.id.l1);
+        CalendarView cl=new CalendarView(this);
+        c.addView(cl);
+        b1.setEnabled(false);
+        CalendarView p=findViewById(R.id.calendarView);
+        p.setVisibility(View.INVISIBLE);
+        s1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(s1.isChecked()){
+                    Toast.makeText(MainActivity.this, "Button is enabled", Toast.LENGTH_SHORT).show();
+                    c.removeView(cl);
+                    b1.setEnabled(true);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Button is disabled", Toast.LENGTH_SHORT).show();
+                    c.addView(cl);
+                    b1.setEnabled(false);
+                }
+            }
+        });
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                p.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+}

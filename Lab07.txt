@@ -1,0 +1,86 @@
+manifest.json
+{
+"name": "User Authentication",
+"short_name": "Login",
+"display": "standalone",
+"start_url": "/",
+"id": "/",
+"Orientation": "portrait_primary",
+"description": "Login using this application",
+"icons": [
+{
+"src": "assets/icon.png",
+"type": "image/png",
+"sizes": "512x512"
+},
+{
+"src": "assets/studio.png",
+"type": "image/png",
+"sizes": "128x128"
+}
+],
+"background_color": "#0000FF",
+"theme_color": "#0000CC"
+}
+
+
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+// linking the manifest file
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="index.css" />
+<link rel="icon" type="image/x-icon" href="assets/icon.ico" />
+</head>
+<body>
+<center>
+<h2>Login to the Application</h2>
+<table>
+<form id="form">
+<tr>
+<th>Username:</th>
+<td>
+<input id="username" type="text" required />
+</td>
+</tr>
+<tr>
+<th>Password:</th>
+<td>
+<input id="password" type="password" required />
+</td>
+</tr>
+<tr>
+<td colspan=2 align="center">
+<input type="submit" id="submit" value="Login" />
+</td>
+</tr>
+</form>
+</table>
+</center>
+<script>
+// storing username and password in local storage
+localStorage.setItem("username", "qwerty");
+localStorage.setItem("password", "123456");
+const login = (e) => {
+e.preventDefault();
+// getting the username and password from form inputs
+var un = document.getElementById("username").value;
+var ps = document.getElementById("password").value;
+// getting the username and password from local storage
+var username = localStorage.getItem("username");
+var password = localStorage.getItem("password");
+if(username == un && password == ps) {
+alert("Login successful!");
+} else {
+alert("Login failed!");
+}
+}
+// running the ‘login’ function on form submit event
+document.getElementById("form").addEventListener("submit",
+login);
+</script>
+</body>
+</html>

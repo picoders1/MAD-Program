@@ -1,0 +1,172 @@
+
+Activity_main.xml code------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:gravity="center"
+ android:text="Practical 5"
+ android:textSize="40dp"
+ tools:layout_editor_absoluteX="111dp"
+ tools:layout_editor_absoluteY="80dp" />
+ <EditText
+ android:id="@+id/username"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:ems="10"
+ android:inputType="textPersonName"
+ android:hint="User Name"
+ android:gravity="center"
+ android:text=""
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.497"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent"
+ app:layout_constraintVertical_bias="0.258" />
+ <EditText
+ android:id="@+id/password"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:ems="10"
+ android:hint="Password"
+ android:gravity="center"
+ android:inputType="textPersonName"
+ android:text=""
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.497"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
+ <Button
+ android:id="@+id/button"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginBottom="228dp"
+ android:text="Register"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintHorizontal_bias="0.498"
+ app:layout_constraintStart_toStartOf="parent" />
+ <Button
+ android:id="@+id/login"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Login"
+ app:layout_constraintBottom_toBottomOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent"
+ app:layout_constraintVertical_bias="0.822" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Step 4: Create a Java class for database connection and query methods.
+
+package com.example.androidlb5;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
+public class database extends SQLiteOpenHelper{
+ public database( Context context) {
+ super(context, "userdb",null,1);
+ }
+ @Override
+ public void onCreate(SQLiteDatabase db) {
+ db.execSQL("create table user(username TEXT primary key , password TEXT)");
+ }
+ @Override
+ public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+ }
+ public boolean insertData(String username , String password){
+ SQLiteDatabase db=this.getWritableDatabase();
+ ContentValues contentValues=new ContentValues();
+ contentValues.put("username",username);
+ contentValues.put("password",password);
+ long result=db.insert("user",null,contentValues);
+ if(result==-1){
+ return false;
+ }else{
+ return true;
+ }
+ }
+ public boolean getData(String username,String password) {
+ SQLiteDatabase db = this.getReadableDatabase();
+ Cursor cr = db.rawQuery("select * from user where username='" + username + "' and 
+password=='"+password+"'", null);
+ if (cr.getCount() == 0) {
+ return false;
+ } else {
+ return true;
+ }
+ }
+}
+
+Step 5: Java Code for Main Activity
+
+package com.example.androidlb5;
+import androidx.appcompat.app.AppCompatActivity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+ String username,password;
+ database DB;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ Button btn=findViewById(R.id.button);
+ Button login=findViewById(R.id.login);
+ EditText usernameText=findViewById(R.id.username);
+ EditText passwordText=findViewById(R.id.password);
+ DB=new database(this);
+ btn.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View view) {
+ username=usernameText.getText().toString();
+ password=passwordText.getText().toString();
+ boolean result=DB.insertData(username,password);
+ if(result==true){
+ Toast.makeText(getApplicationContext(),"Data Inserted",Toast.LENGTH_LONG).show();
+ Log.i("result","Data inserted");
+ }else{
+ Toast.makeText(getApplicationContext(),"Cannot Insert 
+data",Toast.LENGTH_LONG).show();
+ Log.i("result","failed");
+ }
+ }
+ });
+ login.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View view) {
+ username=usernameText.getText().toString();
+ password=passwordText.getText().toString();
+ Boolean cr=DB.getData(username,password);
+ if(cr==false){
+ Toast.makeText(getApplicationContext(),"Invalid 
+credentials",Toast.LENGTH_LONG).show();
+ }else{
+ Toast.makeText(getApplicationContext(),"Welcome 
+"+username,Toast.LENGTH_LONG).show();
+ }
+ }
+ });
+ }
+}
